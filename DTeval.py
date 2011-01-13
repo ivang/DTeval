@@ -81,22 +81,30 @@ class Damage(object):
 
 if __name__ == '__main__':
 
-    if len(argv) < 3:
-	print "Usage", basename(argv[0]), "<power_file> <error_file>"
+    if len(argv) < 2:
+	print "Usage:", basename(argv[0]), """<input_file>
+
+The data in the <input_file> must be organised in the following four columns:
+<PowerDiode voltage> <ScatterDiode voltage> <PD std.dev.> <SD std.dev.>
+"""
 	exit(1)	
 
-    _, power_file, error_file = argv
+    input_file = argv[1]
+    
+    with open(input_file, 'r') as fd:
+	lines = fd.read().splitlines()
+	
+    # Convert the lines to a list of rows, each a list of float numbers
+    rows = [map(float, line) for line in map(str.split, lines)]
+    
+    # Different columns are different data
+    powers, scatters, power_errs, scatter_errs = zip(*rows)
     
     dt = Damage(params, uncerts)
     
-    with open(power_file, 'r') as fd:
-	powers = fd.readlines()
+    fluences, errs = map(dt.fluence, powers), map(dt.dfluence, powers, power_errs)
 
-    with open(error_file, 'r') as fd:
-	sigmas = fd.readlines()
-    
-    fluences, errors = map(dt.fluence, powers), map(dt.dfluence, powers, sigmas)
-
-    for fluence, error in zip(fluences, errors): 
-	print "%.6f %.6f" % (fluence, error)
+    for fluence, scatter, err, scatter_err in \
+	    zip(fluences, scatters, errs, scatter_errs):
+	print "%10.6f" * 4 % (fluence, scatter, err, scatter_err)
 
