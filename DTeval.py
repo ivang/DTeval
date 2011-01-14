@@ -49,7 +49,7 @@ class Damage(object):
 
     def dfluencef(self):
 	paramties = zip(sorted(self._params.keys() + ['U']),
-	    sorted(self._uncerts.keys() + ['dU']))
+		sorted(self._uncerts.keys() + ['dU']))
 	derivs = [(self.fluencef().diff(S(param)) * S(uncert))**2
 		for (param, uncert) in paramties]
 	return sqrt(reduce(lambda x, y: x + y, derivs))
@@ -92,8 +92,7 @@ The data in the <input_file> must be organised in the following four columns:
     
     from parameters import params, uncerts
 
-    input_file = sys.argv[1]
-    with open(input_file, 'r') as fd:
+    with open(sys.argv[1], 'r') as fd:
 	lines = fd.read().splitlines()
 	
     # Convert the lines to a list of rows, each a list of float numbers
@@ -106,6 +105,10 @@ The data in the <input_file> must be organised in the following four columns:
     
     (fluences, errs) = (map(dt.fluence, powers), 
 	    map(dt.dfluence, powers, power_errs))
+
+#    import matplotlib.pyplot as plt
+#    plt.plot(fluences, scatters, 'ro')
+#    plt.show()
 
     for fluence, scatter, err, scatter_err in \
 	    zip(fluences, scatters, errs, scatter_errs):
