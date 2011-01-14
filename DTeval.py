@@ -3,12 +3,11 @@
 
 from __future__ import division
 
-from sys import argv, exit
+import sys
+from os import getcwd
 from os.path import basename
 
 from sympy import *
-
-from parameters import params, uncerts
 
 class Damage(object):
     def __init__(self, params, uncerts):
@@ -81,16 +80,19 @@ class Damage(object):
 
 if __name__ == '__main__':
 
-    if len(argv) < 2:
-	print "Usage:", basename(argv[0]), """<input_file>
+    if len(sys.argv) < 2:
+	print "Usage:", basename(sys.argv[0]), """<input_file>
 
 The data in the <input_file> must be organised in the following four columns:
 <PowerDiode voltage> <ScatterDiode voltage> <PD std.dev.> <SD std.dev.>
 """
-	exit(1)	
-
-    input_file = argv[1]
+	sys.exit(1)	
+	
+    sys.path.insert(0, getcwd())
     
+    from parameters import params, uncerts
+
+    input_file = sys.argv[1]
     with open(input_file, 'r') as fd:
 	lines = fd.read().splitlines()
 	
