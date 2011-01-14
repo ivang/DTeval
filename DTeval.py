@@ -31,8 +31,8 @@ class Damage(object):
 	return self._a * 10**(-3) + self._b * self._U
     
     def beamsizef(self):
-	return self._w * sqrt(1 / (2 * log(2))) * \
-		sqrt(1 + self._z**2 / self._zR**2)
+	return self._w * (sqrt(1 / (2 * log(2))) *
+		sqrt(1 + self._z**2 / self._zR**2))
     
     def axisf(self, plane):
 	return self.beamsizef().subs({
@@ -42,16 +42,16 @@ class Damage(object):
 	})
 
     def areaf(self):
-	return pi * self.axisf('x') * self.axisf('y') / \
-		cos(self._theta / 360 * 2 * pi)
+	return pi * self.axisf('x') * (self.axisf('y') /
+		cos(self._theta / 360 * 2 * pi))
     
     def fluencef(self):
 	return 2 * self.powerf() / (self.areaf() * self._f_rep * 10**4)
 
     def dfluencef(self):
-	paramties = zip(sorted(self._params.keys() + ['U']), \
+	paramties = zip(sorted(self._params.keys() + ['U']),
 	    sorted(self._uncerts.keys() + ['dU']))
-	derivs = [(self.fluencef().diff(S(param)) * S(uncert))**2 \
+	derivs = [(self.fluencef().diff(S(param)) * S(uncert))**2
 		for (param, uncert) in paramties]
 	return sqrt(reduce(lambda x, y: x + y, derivs))
 
@@ -102,7 +102,8 @@ The data in the <input_file> must be organised in the following four columns:
     
     dt = Damage(params, uncerts)
     
-    fluences, errs = map(dt.fluence, powers), map(dt.dfluence, powers, power_errs)
+    (fluences, errs) = (map(dt.fluence, powers), 
+	    map(dt.dfluence, powers, power_errs))
 
     for fluence, scatter, err, scatter_err in \
 	    zip(fluences, scatters, errs, scatter_errs):
