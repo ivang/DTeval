@@ -77,6 +77,9 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(
 	    description='Evaluates damage threshold data.',
+	    epilog="""The input file must contain the following columns,
+	    separated by whitespace:
+	    <PD voltage> <SD voltage> <PD std.dev.> <SD std.dev.>""",
 	    formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('infile', type=argparse.FileType('r'),
 			help='input file')
