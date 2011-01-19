@@ -68,12 +68,12 @@ class Damage(object):
 	return self.areaf().subs(self._params)
 
     def fluence(self, U):
-	if '_J' not in dir(self):
+	if not hasattr(self, '_J'):
 	    self._J = self.fluencef().subs(self._params)
 	return self._J.subs({'U': U}).evalf()
     
     def dfluence(self, U, dU):
-	if '_dJ' not in dir(self):
+	if not hasattr(self, '_dJ'):
 	    self._dJ = self.dfluencef().subs(self._parameters)
 	return self._dJ.subs({'U': U, 'dU': dU}).evalf()
 
