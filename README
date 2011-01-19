@@ -12,4 +12,6 @@ Requirements
 Python 2.6.x or 2.7.x
 SymPy 0.6.7 (not tested with other versions)
 
+If using Python 2.6.x, argparse module is also needed. (argparse is part of 
+the standard library in 2.7.x)
 

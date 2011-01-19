@@ -4,9 +4,9 @@
 from __future__ import division
 
 import sys
-from os import getcwd
-from os.path import basename
+from os.path import dirname, abspath, basename
 
+import argparse
 from sympy import *
 
 class Damage(object):
@@ -80,28 +80,32 @@ class Damage(object):
 
 if __name__ == '__main__':
 
-    if len(sys.argv) < 2:
-	print "Usage:", basename(sys.argv[0]), """<input_file>
+    parser = argparse.ArgumentParser(
+	    description='Evaluates damage threshold data.',
+	    formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('infile', type=argparse.FileType('r'),
+			help='input file')
+    parser.add_argument('-c', dest='config', type=str,
+	    		default='parameters.py',
+	    		help='file containing the setup parameters')
+    parser.add_argument('-o', dest='outfile', type=argparse.FileType('w'),
+	    		default='-',
+	    		help='output file')
+    args = parser.parse_args()
 
-The data in the <input_file> must be organised in the following four columns:
-<PowerDiode voltage> <ScatterDiode voltage> <PD std.dev.> <SD std.dev.>
-"""
-	sys.exit(1)	
-	
-    sys.path.insert(0, getcwd())
-    
-    from parameters import params, uncerts
+    sys.path.insert(0, dirname(abspath(args.config)))
+    configname = basename(args.config)
+    config = __import__(configname[:configname.find('.')],
+	                fromlist=['params', 'uncerts'])
 
-    with open(sys.argv[1], 'r') as fd:
-	lines = fd.read().splitlines()
-	
+    lines = args.infile.read().splitlines()
+    args.infile.close()
+
     # Convert the lines to a list of rows, each a list of float numbers
     rows = [map(float, line) for line in map(str.split, lines)]
-    
-    # Different columns are different data
     powers, scatters, power_errs, scatter_errs = zip(*rows)
     
-    dt = Damage(params, uncerts)
+    dt = Damage(config.params, config.uncerts)
     
     (fluences, errs) = (map(dt.fluence, powers), 
 	    map(dt.dfluence, powers, power_errs))
@@ -112,5 +116,6 @@ The data in the <input_file> must be organised in the following four columns:
 
     for fluence, scatter, err, scatter_err in \
 	    zip(fluences, scatters, errs, scatter_errs):
-	print "%10.6f" * 4 % (fluence, scatter, err, scatter_err)
+	args.outfile.write("%10.6f" * 4 % (fluence, scatter, err, scatter_err) + '\n')
+    args.outfile.close()
 
