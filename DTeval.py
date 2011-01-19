@@ -14,13 +14,8 @@ class Damage(object):
 	self._params = params
 	self._uncerts = uncerts
 	self._parameters = dict(params.items() + uncerts.items())
-	variables = 'U dU w z zR'.split()
-
-	for key in self._params.keys() + self._uncerts.keys() + variables:
-	    eval(compile(
-		'self._%s = symbols("%s", each_char=False)' % (key, key),
-		'<string>', 'single'
-	    ))
+	for key in self._parameters.keys() + 'U dU w z zR'.split():
+	    setattr(self, '_%s' % key, symbols(key, each_char=False))
 
     def powerf(self):
 	""" 
