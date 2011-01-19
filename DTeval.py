@@ -80,12 +80,16 @@ if __name__ == '__main__':
 	    formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('infile', type=argparse.FileType('r'),
 			help='input file')
-    parser.add_argument('-c', dest='config', type=str,
-	    		default='parameters.py',
-	    		help='file containing the setup parameters')
     parser.add_argument('-o', dest='outfile', type=argparse.FileType('w'),
 	    		default='-',
-	    		help='output file')
+	    		help='write the resulting data to OUTFILE')
+    parser.add_argument('-c', dest='config', type=str,
+	    		default='parameters.py',
+	    		help='read the setup parameters from CONFIG')
+    parser.add_argument('-f', nargs='?', dest='figure', type=str,
+	    		default=argparse.SUPPRESS, const='-',
+	    		help='plot the data and write it in FIGURE. If\
+			      FIGURE is ommited, show the plot in a window.')
     args = parser.parse_args()
 
     sys.path.insert(0, dirname(abspath(args.config)))
@@ -105,9 +109,14 @@ if __name__ == '__main__':
     (fluences, errs) = (map(dt.fluence, powers), 
 	    map(dt.dfluence, powers, power_errs))
 
-#    import matplotlib.pyplot as plt
-#    plt.plot(fluences, scatters, 'ro')
-#    plt.show()
+    if hasattr(args, 'figure'):
+	import matplotlib.pyplot as plot
+	plot.errorbar(fluences, scatters, 
+		     xerr=errs, yerr=scatter_errs, fmt='ro')
+	if args.figure == '-':
+	    plot.show()
+	else:
+	    plot.savefig(args.figure)
 
     for fluence, scatter, err, scatter_err in \
 	    zip(fluences, scatters, errs, scatter_errs):
