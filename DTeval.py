@@ -93,8 +93,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     sys.path.insert(0, dirname(abspath(args.config)))
-    configname = basename(args.config)
-    config = __import__(configname[:configname.find('.')],
+    config = __import__(basename(args.config).split('.')[0],
 	                fromlist=['params', 'uncerts'])
 
     lines = args.infile.read().splitlines()
