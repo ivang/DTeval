@@ -3,7 +3,7 @@
 
 from __future__ import division
 
-import sys
+from sys import path as syspath
 from os.path import dirname, abspath, basename
 
 import argparse
@@ -92,7 +92,7 @@ if __name__ == '__main__':
 			      FIGURE is ommited, show the plot in a window.')
     args = parser.parse_args()
 
-    sys.path.insert(0, dirname(abspath(args.config)))
+    syspath.insert(0, dirname(abspath(args.config)))
     config = __import__(basename(args.config).split('.')[0],
 	                fromlist=['params', 'uncerts'])
 
