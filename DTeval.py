@@ -28,8 +28,7 @@ class Damage(object):
 	return self._a * 10**(-3) + self._b * self._U
     
     def beamsizef(self):
-	return self._w * (sqrt(1 / (2 * log(2))) *
-		sqrt(1 + self._z**2 / self._zR**2))
+	return (self._w / 2) * sqrt(1 + self._z**2 / self._zR**2)
     
     def axisf(self, plane):
 	return self.beamsizef().subs({
