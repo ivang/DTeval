@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# TODO: Check whether we are overwriting the input file. And if yes, do it 
+# properly, i.e. first read it and only then overwrite it.
+
 from __future__ import division
 
 from sys import path as syspath
