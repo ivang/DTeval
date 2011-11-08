@@ -17,7 +17,7 @@ class Damage(object):
 	self._params = params
 	self._uncerts = uncerts
 	self._parameters = dict(params.items() + uncerts.items())
-	for key in self._parameters.keys() + 'U dU w z zR'.split():
+	for key in self._parameters.keys() + 'U dU w'.split():
 	    setattr(self, '_%s' % key, symbols(key, each_char=False))
 
     def powerf(self):
@@ -28,17 +28,10 @@ class Damage(object):
 	return self._a * 10**(-3) + self._b * self._U
     
     def beamsizef(self):
-	return (self._w / 2) * sqrt(1 + self._z**2 / self._zR**2)
+	return self._w / 2.
     
-    def axisf(self, plane):
-	return self.beamsizef().subs({
-	    'w': 'w_' + plane,
-	    'z': 'z_' + plane,
-	    'zR': 'zR_' + plane,
-	})
-
     def areaf(self):
-	return pi * self.axisf('x') * (self.axisf('y') /
+	return pi * self.beamsizef() /
 		cos(self._theta / 360 * 2 * pi))
     
     def fluencef(self):
