@@ -31,8 +31,7 @@ class Damage(object):
 	return self._w / 2.
     
     def areaf(self):
-	return pi * self.beamsizef() /
-		cos(self._theta / 360 * 2 * pi))
+	return pi * self.beamsizef() / cos(self._theta / 360 * 2 * pi)
     
     def fluencef(self):
 	return 2 * self.powerf() / (self.areaf() * self._f_rep * 10**4)
