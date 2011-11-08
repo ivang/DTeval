@@ -1,14 +1,14 @@
 params = {
 	# Diode calibration parameters
-	'a': -2.87226,     # intercept [mW]
-	'b':  1.38603,     # slope [mW/mV]
+	'a': -2.87226,     # intercept [W]
+	'b':  1.38603,     # slope [W/V]
 
 	# Mean waist size [m]
 	'w': 50e-6,
 	# Angle of incidence [deg]
 	'theta': 1.5,
 	# Repetition rate [Hz]
-	'f_rep': 500,
+	'f_rep': 11e6,
 }
 
 # The respective standart deviations
