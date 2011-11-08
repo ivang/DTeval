@@ -25,13 +25,13 @@ class Damage(object):
 	Given the calibration parameters a and b, calculates the power [W]
 	from the voltage [V] measured by the photodiode.
 	"""
-	return self._a * 10**(-3) + self._b * self._U
+	return self._a + self._b * self._U
     
     def beamsizef(self):
 	return self._w / 2.
     
     def areaf(self):
-	return pi * self.beamsizef() / cos(self._theta / 360 * 2 * pi)
+	return pi * self.beamsizef()**2 / cos(self._theta / 360 * 2 * pi)
     
     def fluencef(self):
 	return 2 * self.powerf() / (self.areaf() * self._f_rep * 10**4)
@@ -98,7 +98,9 @@ if __name__ == '__main__':
 
     # Convert the lines to a list of rows, each a list of float numbers
     rows = [map(float, line) for line in map(str.split, lines)]
-    powers, scatters, power_errs, scatter_errs = zip(*rows)
+
+    # At the moment doing nothing with the elapsed time
+    powers, scatters, power_errs, scatter_errs, elapsed = zip(*rows)
     
     dt = Damage(config.params, config.uncerts)
     
