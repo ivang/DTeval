@@ -109,8 +109,17 @@ if __name__ == '__main__':
 
     if hasattr(args, 'figure'):
 	import matplotlib.pyplot as plot
+	from numpy import arange
+	
+	# Setting the step for the xticks
+	plot.xticks(arange(0, 3.0, step=0.1))
+
+	# Plot scatter signal vs fluence using red dash-dot with errorbars
 	plot.errorbar(fluences, scatters, 
-		     xerr=errs, yerr=scatter_errs, fmt='ro')
+		     xerr=errs, yerr=scatter_errs, fmt='ro--')
+
+	# Write the figure to args.figure if not empty
+	# otherwise show it in a window
 	if args.figure == '-':
 	    plot.show()
 	else:
