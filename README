@@ -3,7 +3,7 @@ Description
 
 This piece of code calculates the optically induced damage threshold of
 mirrors, given certain parameters and data files, obtained from _one_
-experimental setup in particular. Thus most probably it will be only useful
+experimental setup in particular. Thus, most probably it will be only useful
 to people working with that setup.
 
 Requirements
