@@ -18,7 +18,7 @@ class Damage(object):
 	self._uncerts = uncerts
 	self._parameters = dict(params.items() + uncerts.items())
 	for key in self._parameters.keys() + 'U dU w'.split():
-	    setattr(self, '_%s' % key, symbols(key, each_char=False))
+	    setattr(self, '_%s' % key, symbols(key))
 
     def powerf(self):
 	""" 
@@ -112,7 +112,7 @@ if __name__ == '__main__':
 	from numpy import arange
 	
 	# Setting the step for the xticks
-	plot.xticks(arange(0, 3.0, step=0.1))
+	# plot.xticks(arange(0, 3.0, step=0.1))
 
 	# Plot scatter signal vs fluence using red dash-dot with errorbars
 	plot.errorbar(fluences, scatters, 
