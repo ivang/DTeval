@@ -17,15 +17,15 @@ class Damage(object):
 	self._params = params
 	self._uncerts = uncerts
 	self._parameters = dict(params.items() + uncerts.items())
-	for key in self._parameters.keys() + 'U dU w z zR'.split():
-	    setattr(self, '_%s' % key, symbols(key, each_char=False))
+	for key in self._parameters.keys() + 'U dU w'.split():
+	    setattr(self, '_%s' % key, symbols(key))
 
     def powerf(self):
 	""" 
 	Given the calibration parameters a and b, calculates the power [W]
 	from the voltage [V] measured by the photodiode.
 	"""
-	return self._a * 10**(-3) + self._b * self._U
+	return self._a + self._b * self._U
     
     def beamsizef(self):
 	return (self._w / 2) * sqrt(1 + self._z**2 / self._zR**2)
@@ -115,6 +115,12 @@ if __name__ == '__main__':
 
     if hasattr(args, 'figure'):
 	import matplotlib.pyplot as plot
+	from numpy import arange
+	
+	# Setting the step for the xticks
+	# plot.xticks(arange(0, 3.0, step=0.1))
+
+	# Plot scatter signal vs fluence using red dash-dot with errorbars
 	plot.errorbar(fluences, scatters, 
 		     xerr=errs, yerr=scatter_errs, fmt='ro')
 	if args.figure == '-':

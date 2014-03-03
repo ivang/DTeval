@@ -10,7 +10,7 @@ Requirements
 ------------
 
 Python 2.6.x or 2.7.x
-SymPy 0.6.7 (not tested with other versions)
+SymPy 0.7.0 or later
 matplotlib (only tested with v0.99)
 
 If using Python 2.6.x, argparse module is also needed. (argparse is part of 
